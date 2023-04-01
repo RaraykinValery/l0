@@ -1,8 +1,11 @@
-module github.com/raraykinvalery/l0
+module github.com/RaraykinValery/l0
 
 go 1.20
 
-require github.com/nats-io/stan.go v0.10.4
+require (
+	github.com/lib/pq v1.10.4
+	github.com/nats-io/stan.go v0.10.4
+)
 
 require (
 	github.com/gogo/protobuf v1.3.2 // indirect
