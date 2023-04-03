@@ -80,15 +80,17 @@ func main() {
 		stan.NatsURL("nats://localhost:4222"))
 	if err != nil {
 		log.Fatalf("Failed to connect to NATS Streaming: %v", err)
+		panic(err)
 	}
 	defer sc.Close()
 
 	for {
-		time.Sleep(5 * time.Second)
+		time.Sleep(10 * time.Second)
 		randomOrder.OrderUID = RandStringRunes(15) + "test"
 		bOrder, err := json.Marshal(randomOrder)
 		if err != nil {
 			log.Printf("Failed to marshal order: %v", err)
+			return
 		}
 
 		sc.Publish("orders", bOrder)

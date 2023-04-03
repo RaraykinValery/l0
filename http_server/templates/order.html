@@ -1,0 +1,163 @@
+{{define "order"}}
+{{if not (eq .OrderUID "")}}
+<h2>Order details</h2>
+<table class="order vertical-table">
+    <tr>
+        <th>Order UID</th>
+        <td>{{.OrderUID}}</td>
+    </tr>
+    <tr>
+        <th>Track Number</th>
+        <td>{{.TrackNumber}}</td>
+    </tr>
+    <tr>
+        <th>Entry</th>
+        <td>{{.Entry}}</td>
+    </tr>
+    <tr>
+        <th>Locale</th>
+        <td>{{.Locale}}</td>
+    </tr>
+    <tr>
+        <th>Internal Signature</th>
+        <td>{{.InternalSignature}}</td>
+    </tr>
+    <tr>
+        <th>Customer ID</th>
+        <td>{{.CustomerID}}</td>
+    </tr>
+    <tr>
+        <th>Delivery Service</th>
+        <td>{{.DeliveryService}}</td>
+    </tr>
+    <tr>
+        <th>Shardkey</th>
+        <td>{{.ShardKey}}</td>
+    </tr>
+    <tr>
+        <th>SM ID</th>
+        <td>{{.SMID}}</td>
+    </tr>
+    <tr>
+        <th>Date Created</th>
+        <td>{{.DateCreated}}</td>
+    </tr>
+    <tr>
+        <th>OOF Shard</th>
+        <td>{{.OOFShard}}</td>
+    </tr>
+</table>
+
+<h2>Delivery Details</h2>
+<table class="delivery vertical-table">
+    <tr>
+        <th>Name</th>
+        <td>{{.Delivery.Name}}</td>
+    </tr>
+    <tr>
+        <th>Phone</th>
+        <td>{{.Delivery.Phone}}</td>
+    </tr>
+    <tr>
+        <th>Zip</th>
+        <td>{{.Delivery.Zip}}</td>
+    </tr>
+    <tr>
+        <th>City</th>
+        <td>{{.Delivery.City}}</td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td>{{.Delivery.Address}}</td>
+    </tr>
+    <tr>
+        <th>Region</th>
+        <td>{{.Delivery.Region}}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{{.Delivery.Email}}</td>
+    </tr>
+</table>
+
+<h2>Payment Details</h2>
+<table class="payment vertical-table">
+    <tr>
+        <th>Transaction</th>
+        <td>{{.Payment.Transaction}}</td>
+    </tr>
+    <tr>
+        <th>Request ID</th>
+        <td>{{.Payment.RequestID}}</td>
+    </tr>
+    <tr>
+        <th>Currency</th>
+        <td>{{.Payment.Currency}}</td>
+    </tr>
+    <tr>
+        <th>Provider</th>
+        <td>{{.Payment.Provider}}</td>
+    </tr>
+    <tr>
+        <th>Amount</th>
+        <td>{{.Payment.Amount}}</td>
+    </tr>
+    <tr>
+        <th>Payment Date</th>
+        <td>{{.Payment.PaymentDt}}</td>
+    </tr>
+    <tr>
+        <th>Bank</th>
+        <td>{{.Payment.Bank}}</td>
+    </tr>
+    <tr>
+        <th>Delivery Cost</th>
+        <td>{{.Payment.DeliveryCost}}</td>
+    </tr>
+    <tr>
+        <th>Goods Total</th>
+        <td>{{.Payment.GoodsTotal}}</td>
+    </tr>
+    <tr>
+        <th>Custom Fee</th>
+        <td>{{.Payment.CustomFee}}</td>
+    </tr>
+</table>
+
+<h2>Items</h2>
+<div class="items-container">
+    <table class="items">
+        <tr>
+            <th>Chart ID</th>
+            <th>Track Number</th>
+            <th>Price</th>
+            <th>RID</th>
+            <th>Name</th>
+            <th>Sale</th>
+            <th>Size</th>
+            <th>Total Price</th>
+            <th>NMID</th>
+            <th>Brand</th>
+            <th>Status</th>
+        </tr>
+        {{range .Items}}
+        <tr>
+            <td>{{.ChrtID}}</td>
+            <td>{{.TrackNumber}}</td>
+            <td>{{.Price}}</td>
+            <td>{{.RID}}</td>
+            <td>{{.Name}}</td>
+            <td>{{.Sale}}</td>
+            <td>{{.Size}}</td>
+            <td>{{.TotalPrice}}</td>
+            <td>{{.NMID}}</td>
+            <td>{{.Brand}}</td>
+            <td>{{.Status}}</td>
+        </tr>
+        {{end}}
+    </table>
+</div>
+{{else}}
+<p class="not-found">Order not found</p>
+{{end}}
+{{end}}

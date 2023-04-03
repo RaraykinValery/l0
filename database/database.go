@@ -48,10 +48,8 @@ func ConnectToDB() (*sql.DB, error) {
 func InsertOrderToDB(order models.Order) error {
 	bOrder, err := json.Marshal(order)
 	if err != nil {
-		if err != nil {
-			log.Printf("Failed to unmarshal order: %v", err)
-			return err
-		}
+		log.Printf("Failed to unmarshal order: %v", err)
+		return err
 	}
 
 	_, err = db.Exec(`INSERT INTO orders ("uuid", "data") values ($1, $2)`,
@@ -80,4 +78,31 @@ func GetOrderFromDB(uuid string) (models.Order, error) {
 
 	return order, nil
 
+}
+
+func GetAllOrdersFromDB() ([]models.Order, error) {
+	var orders []models.Order
+
+	rows, err := db.Query("SELECT data FROM orders")
+	if err != nil {
+		return []models.Order{}, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var data []byte
+		var order models.Order
+
+		if err := rows.Scan(&data); err != nil {
+			return []models.Order{}, err
+		}
+
+		err := json.Unmarshal(data, &order)
+		if err != nil {
+			return []models.Order{}, err
+		}
+		orders = append(orders, order)
+	}
+
+	return orders, nil
 }

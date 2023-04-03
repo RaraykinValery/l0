@@ -1,4 +1,4 @@
-package main
+package subscriber
 
 import (
 	"encoding/json"
@@ -15,7 +15,7 @@ func messageHandler(msg *stan.Msg) {
 
 	err := json.Unmarshal(msg.Data, &order)
 	if err != nil {
-		log.Printf("Failed to unmarshal order: %v", err)
+		log.Printf("Failed to unmarshal order: %s", err)
 		return
 	}
 
@@ -23,17 +23,18 @@ func messageHandler(msg *stan.Msg) {
 
 	err = database.InsertOrderToDB(order)
 	if err != nil {
-		panic(err)
+		log.Printf("Failed to write order to database: %s", err)
+		return
 	}
 
 	log.Printf("Received order with uid: %v", order.OrderUID)
 }
 
-func main() {
-
+func StartSubscriber() {
 	sc, err := stan.Connect("test-cluster", "client-subscriber-1", stan.NatsURL("nats://localhost:4222"))
 	if err != nil {
 		log.Fatalf("Failed to connect to NATS Streaming: %v", err)
+		panic(err)
 	}
 	defer sc.Close()
 
@@ -42,6 +43,7 @@ func main() {
 		stan.DurableName("my-durable"))
 	if err != nil {
 		log.Fatalf("Failed to subscribe to subject: %v", err)
+		panic(err)
 	}
 	defer sub.Close()
 
