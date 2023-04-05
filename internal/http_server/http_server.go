@@ -10,13 +10,11 @@ import (
 	"github.com/RaraykinValery/l0/internal/models"
 )
 
-var templates_path string = filepath.Join("web", "templates")
-
+var templates_root string = filepath.Join("web", "templates")
 var templates_paths = []string{
-	filepath.Join(templates_path, "index.html"),
-	filepath.Join(templates_path, "order.html"),
+	filepath.Join(templates_root, "index.html"),
+	filepath.Join(templates_root, "order.html"),
 }
-
 var templates = template.Must(template.ParseFiles(templates_paths...))
 
 func orderHandler(w http.ResponseWriter, r *http.Request) {

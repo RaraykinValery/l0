@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
+	"github.com/RaraykinValery/l0/internal/config"
 	"github.com/RaraykinValery/l0/internal/models"
 	_ "github.com/lib/pq"
 )
@@ -16,12 +16,14 @@ var db *sql.DB
 func Connect() error {
 	var err error
 
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		"localhost",
-		5432,
-		os.Getenv("POSTGRES_USER"),
-		os.Getenv("POSTGRES_PASSWORD"),
-		"wildberries")
+	psqlconn := fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		config.Database.HOST,
+		config.Database.PORT,
+		config.Database.USER,
+		config.Database.PASSWORD,
+		config.Database.DB_NAME,
+	)
 
 	log.Print("Connecting to database...")
 
@@ -71,7 +73,9 @@ func SelectOrder(uuid string) (models.Order, error) {
 }
 
 func SelectAllOrders() ([]models.Order, error) {
-	var orders []models.Order
+	var data []byte
+	var order models.Order
+	var all_orders []models.Order
 
 	rows, err := db.Query("SELECT data FROM orders")
 	if err != nil {
@@ -80,9 +84,6 @@ func SelectAllOrders() ([]models.Order, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var data []byte
-		var order models.Order
-
 		if err := rows.Scan(&data); err != nil {
 			return []models.Order{}, err
 		}
@@ -91,8 +92,8 @@ func SelectAllOrders() ([]models.Order, error) {
 		if err != nil {
 			return []models.Order{}, err
 		}
-		orders = append(orders, order)
+		all_orders = append(all_orders, order)
 	}
 
-	return orders, nil
+	return all_orders, nil
 }
