@@ -18,8 +18,8 @@ func isValidPort(s string) bool {
 }
 
 var templates_paths = []string{
-	filepath.Join("templates", "index.html"),
-	filepath.Join("templates", "order.html"),
+	filepath.Join("web", "templates", "index.html"),
+	filepath.Join("web", "templates", "order.html"),
 }
 
 var templates = template.Must(template.ParseFiles(templates_paths...))
@@ -50,7 +50,7 @@ func StartHTTPServer(port string) error {
 		return errors.New("Not valid port %q")
 	}
 
-	fileServer := http.FileServer(http.Dir("./static/"))
+	fileServer := http.FileServer(http.Dir("web/static/"))
 
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
 	http.HandleFunc("/", orderHandler)
