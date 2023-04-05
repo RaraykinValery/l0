@@ -1,14 +1,14 @@
 main {
     margin: auto;
-    width: 55%;
-    min-width: 375px;
+    max-width: 1000px;
+    min-width: 360px;
 }
 
 form {
     display: flex;
     justify-content: center;
     width: 60%;
-    min-width: 375px;
+    min-width: 350px;
     margin: auto;
 }
 
@@ -58,7 +58,7 @@ th, td {
 
 .vertical-table {
     width: 60%;
-    min-width: 375px;
+    min-width: 350px;
     margin: auto;
 }
 
