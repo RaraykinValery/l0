@@ -7,26 +7,24 @@ import (
 	"github.com/RaraykinValery/l0/internal/subscriber"
 )
 
+func panicOnError(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
 func main() {
 	var err error
 
 	err = database.Connect()
-	if err != nil {
-		panic(err)
-	}
+	panicOnError(err)
 
 	err = cache.Init()
-	if err != nil {
-		panic(err)
-	}
+	panicOnError(err)
 
-	err = subscriber.StartSubscriber()
-	if err != nil {
-		panic(err)
-	}
+	err = subscriber.Start()
+	panicOnError(err)
 
-	err = http_server.StartHTTPServer(":8080")
-	if err != nil {
-		panic(err)
-	}
+	err = http_server.Start(":8080")
+	panicOnError(err)
 }

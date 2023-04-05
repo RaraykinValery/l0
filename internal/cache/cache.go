@@ -10,6 +10,8 @@ import (
 var app_cache = make(map[string]models.Order)
 
 func Init() error {
+	log.Printf("Loading orders to cache from database...")
+
 	err := loadOrdersFromDBToCache()
 	if err != nil {
 		return err

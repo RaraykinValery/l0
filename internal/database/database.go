@@ -22,12 +22,15 @@ func Connect() error {
 		os.Getenv("POSTGRES_USER"),
 		os.Getenv("POSTGRES_PASSWORD"),
 		"wildberries")
+
+	log.Print("Connecting to database...")
+
 	db, err = sql.Open("postgres", psqlconn)
 	if err != nil {
 		return err
 	}
 
-	log.Print("Connected to database")
+	log.Print("Database connected")
 
 	return nil
 }

@@ -33,7 +33,7 @@ func messageHandler(msg *stan.Msg) {
 	log.Printf("Received order with uid: %v", order.OrderUID)
 }
 
-func StartSubscriber() error {
+func Start() error {
 	sc, err := stan.Connect("test-cluster", "client-subscriber-1", stan.NatsURL("nats://localhost:4222"))
 	if err != nil {
 		log.Fatalf("Failed to connect to NATS Streaming: %v", err)
