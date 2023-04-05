@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/RaraykinValery/l0/models"
+	"github.com/RaraykinValery/l0/internal/models"
 	_ "github.com/lib/pq"
 )
 
@@ -20,12 +20,13 @@ func init() {
 		"localhost",
 		5432,
 		os.Getenv("POSTGRES_USER"),
-		os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"),
 		"wildberries")
 	db, err = sql.Open("postgres", psqlconn)
 	if err != nil {
 		panic(err)
 	}
+	log.Print("Connected to database")
 }
 
 func ConnectToDB() (*sql.DB, error) {
@@ -35,7 +36,7 @@ func ConnectToDB() (*sql.DB, error) {
 		"localhost",
 		5432,
 		os.Getenv("POSTGRES_USER"),
-		os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"),
 		"wildberries")
 	db, err = sql.Open("postgres", psqlconn)
 	if err != nil {

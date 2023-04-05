@@ -3,8 +3,8 @@ package cache
 import (
 	"log"
 
-	"github.com/RaraykinValery/l0/database"
-	"github.com/RaraykinValery/l0/models"
+	"github.com/RaraykinValery/l0/internal/database"
+	"github.com/RaraykinValery/l0/internal/models"
 )
 
 var (
@@ -26,8 +26,7 @@ func init() {
 		log.Printf("Couldn't load orders from database: %s", err.Error())
 		panic(err)
 	}
-	log.Print("Orders have been loaded to cache.")
-	log.Printf("Cache size = %v", len(app_cache.Data))
+	log.Printf("%v orders have been loaded to cache.", len(app_cache.Data))
 
 	initialised = true
 }

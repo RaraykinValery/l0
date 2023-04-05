@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"regexp"
 
-	"github.com/RaraykinValery/l0/cache"
-	"github.com/RaraykinValery/l0/models"
+	"github.com/RaraykinValery/l0/internal/cache"
+	"github.com/RaraykinValery/l0/internal/models"
 )
 
 func isValidPort(s string) bool {

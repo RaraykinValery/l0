@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/RaraykinValery/l0/cache"
-	"github.com/RaraykinValery/l0/database"
-	"github.com/RaraykinValery/l0/models"
+	"github.com/RaraykinValery/l0/internal/cache"
+	"github.com/RaraykinValery/l0/internal/database"
+	"github.com/RaraykinValery/l0/internal/models"
 	"github.com/nats-io/stan.go"
 )
 
@@ -30,22 +30,20 @@ func messageHandler(msg *stan.Msg) {
 	log.Printf("Received order with uid: %v", order.OrderUID)
 }
 
-func StartSubscriber() {
+func StartSubscriber() (stan.Conn, stan.Subscription, error) {
 	sc, err := stan.Connect("test-cluster", "client-subscriber-1", stan.NatsURL("nats://localhost:4222"))
 	if err != nil {
 		log.Fatalf("Failed to connect to NATS Streaming: %v", err)
-		panic(err)
+		return nil, nil, err
 	}
-	defer sc.Close()
 
 	sub, err := sc.Subscribe("orders",
 		messageHandler,
 		stan.DurableName("my-durable"))
 	if err != nil {
 		log.Fatalf("Failed to subscribe to subject: %v", err)
-		panic(err)
+		return nil, nil, err
 	}
-	defer sub.Close()
 
-	select {}
+	return sc, sub, nil
 }
