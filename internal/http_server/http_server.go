@@ -1,21 +1,14 @@
 package http_server
 
 import (
-	"errors"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
-	"regexp"
 
 	"github.com/RaraykinValery/l0/internal/cache"
 	"github.com/RaraykinValery/l0/internal/models"
 )
-
-func isValidPort(s string) bool {
-	re := regexp.MustCompile(`^:\d{4}$`)
-	return re.MatchString(s)
-}
 
 var templates_paths = []string{
 	filepath.Join("web", "templates", "index.html"),
@@ -46,10 +39,6 @@ func orderHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func StartHTTPServer(port string) error {
-	if ok := isValidPort(port); !ok {
-		return errors.New("Not valid port %q")
-	}
-
 	fileServer := http.FileServer(http.Dir("web/static/"))
 
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
