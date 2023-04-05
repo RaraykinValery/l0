@@ -34,17 +34,36 @@ func messageHandler(msg *stan.Msg) {
 }
 
 func Start() error {
-	sc, err := stan.Connect("test-cluster", "client-subscriber-1", stan.NatsURL("nats://localhost:4222"))
+	var err error
+
+	sc, err = stan.Connect(
+		"test-cluster",
+		"client-subscriber-1",
+		stan.NatsURL("nats://localhost:4222"),
+	)
 	if err != nil {
-		log.Fatalf("Failed to connect to NATS Streaming: %v", err)
 		return err
 	}
 
-	sub, err = sc.Subscribe("orders",
+	sub, err = sc.Subscribe(
+		"orders",
 		messageHandler,
-		stan.DurableName("my-durable"))
+	)
 	if err != nil {
-		log.Fatalf("Failed to subscribe to subject: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+func Stop() error {
+	err := sub.Unsubscribe()
+	if err != nil {
+		return err
+	}
+
+	err = sc.Close()
+	if err != nil {
 		return err
 	}
 

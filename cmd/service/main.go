@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/RaraykinValery/l0/internal/cache"
-	"github.com/RaraykinValery/l0/internal/database"
-	"github.com/RaraykinValery/l0/internal/http_server"
-	"github.com/RaraykinValery/l0/internal/subscriber"
+	"os"
+	"os/signal"
+	"syscall"
+
+	"github.com/RaraykinValery/l0/internal/service"
 )
 
 func panicOnError(e error) {
@@ -14,17 +15,17 @@ func panicOnError(e error) {
 }
 
 func main() {
-	var err error
+	err := service.Start()
+	if err != nil {
+		panic(err)
+	}
 
-	err = database.Connect()
-	panicOnError(err)
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
 
-	err = cache.Init()
-	panicOnError(err)
-
-	err = subscriber.Start()
-	panicOnError(err)
-
-	err = http_server.Start(":8080")
-	panicOnError(err)
+	err = service.Stop()
+	if err != nil {
+		panic(err)
+	}
 }

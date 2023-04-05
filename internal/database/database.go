@@ -37,15 +37,25 @@ func Connect() error {
 	return nil
 }
 
-func InsertOrder(order models.Order) error {
-	bOrder, err := json.Marshal(order)
+func Disconnect() error {
+	err := db.Close()
 	if err != nil {
-		log.Printf("Failed to unmarshal order: %v", err)
 		return err
 	}
 
-	_, err = db.Exec(`INSERT INTO orders ("uuid", "data") values ($1, $2)`,
-		order.OrderUID, bOrder)
+	return nil
+}
+
+func InsertOrder(order models.Order) error {
+	bOrder, err := json.Marshal(order)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec(
+		`INSERT INTO orders ("uuid", "data") values ($1, $2)`,
+		order.OrderUID, bOrder,
+	)
 	if err != nil {
 		return err
 	}

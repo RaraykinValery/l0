@@ -1,14 +1,18 @@
 package http_server
 
 import (
+	"context"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
+	"time"
 
 	"github.com/RaraykinValery/l0/internal/cache"
 	"github.com/RaraykinValery/l0/internal/models"
 )
+
+var server http.Server
 
 var templates_root string = filepath.Join("web", "templates")
 var templates_paths = []string{
@@ -39,12 +43,28 @@ func orderHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Start(port string) error {
+	server = http.Server{Addr: port}
+
 	fileServer := http.FileServer(http.Dir("web/static/"))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
 	http.HandleFunc("/", orderHandler)
 
-	log.Fatal(http.ListenAndServe(port, nil))
+	go func() {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Failed to start server: %v", err)
+		}
+	}()
+
+	return nil
+}
+
+func Shutdown() error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := server.Shutdown(ctx); err != nil {
+		return err
+	}
 
 	return nil
 }
