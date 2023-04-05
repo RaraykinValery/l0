@@ -13,7 +13,7 @@ import (
 
 var db *sql.DB
 
-func init() {
+func Connect() error {
 	var err error
 
 	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
@@ -24,29 +24,15 @@ func init() {
 		"wildberries")
 	db, err = sql.Open("postgres", psqlconn)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
 	log.Print("Connected to database")
+
+	return nil
 }
 
-func ConnectToDB() (*sql.DB, error) {
-	var err error
-
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		"localhost",
-		5432,
-		os.Getenv("POSTGRES_USER"),
-		os.Getenv("POSTGRES_PASSWORD"),
-		"wildberries")
-	db, err = sql.Open("postgres", psqlconn)
-	if err != nil {
-		return nil, err
-	}
-
-	return db, nil
-}
-
-func InsertOrderToDB(order models.Order) error {
+func InsertOrder(order models.Order) error {
 	bOrder, err := json.Marshal(order)
 	if err != nil {
 		log.Printf("Failed to unmarshal order: %v", err)
@@ -62,7 +48,7 @@ func InsertOrderToDB(order models.Order) error {
 	return nil
 }
 
-func GetOrderFromDB(uuid string) (models.Order, error) {
+func SelectOrder(uuid string) (models.Order, error) {
 	var bOrder []byte
 	var order models.Order
 
@@ -81,7 +67,7 @@ func GetOrderFromDB(uuid string) (models.Order, error) {
 
 }
 
-func GetAllOrdersFromDB() ([]models.Order, error) {
+func SelectAllOrders() ([]models.Order, error) {
 	var orders []models.Order
 
 	rows, err := db.Query("SELECT data FROM orders")

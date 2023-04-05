@@ -7,47 +7,36 @@ import (
 	"github.com/RaraykinValery/l0/internal/models"
 )
 
-var (
-	app_cache        = Cache{Data: make(map[string]models.Order)}
-	initialised bool = false
-)
+var app_cache = make(map[string]models.Order)
 
-type Cache struct {
-	Data map[string]models.Order
-}
-
-func init() {
-	if initialised {
-		return
-	}
-
-	err := LoadOrdersFromDBToCache()
+func Init() error {
+	err := loadOrdersFromDBToCache()
 	if err != nil {
-		log.Printf("Couldn't load orders from database: %s", err.Error())
-		panic(err)
+		return err
 	}
-	log.Printf("%v orders have been loaded to cache.", len(app_cache.Data))
 
-	initialised = true
+	log.Printf("%v orders have been loaded to cache.", len(app_cache))
+
+	return nil
 }
 
-func GetOrderFromCache(uuid string) (models.Order, bool) {
-	val, ok := app_cache.Data[uuid]
+func GetOrder(uuid string) (models.Order, bool) {
+	val, ok := app_cache[uuid]
 	return val, ok
 }
 
-func PutOrderToCache(order models.Order) {
-	app_cache.Data[order.OrderUID] = order
+func PutOrder(order models.Order) {
+	app_cache[order.OrderUID] = order
 }
 
-func LoadOrdersFromDBToCache() error {
-	orders, err := database.GetAllOrdersFromDB()
+func loadOrdersFromDBToCache() error {
+	orders, err := database.SelectAllOrders()
 	if err != nil {
 		return err
 	}
 
 	for _, v := range orders {
-		PutOrderToCache(v)
+		PutOrder(v)
 	}
 
 	return nil

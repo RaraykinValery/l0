@@ -10,6 +10,9 @@ import (
 	"github.com/nats-io/stan.go"
 )
 
+var sc stan.Conn
+var sub stan.Subscription
+
 func messageHandler(msg *stan.Msg) {
 	var order models.Order
 
@@ -19,9 +22,9 @@ func messageHandler(msg *stan.Msg) {
 		return
 	}
 
-	cache.PutOrderToCache(order)
+	cache.PutOrder(order)
 
-	err = database.InsertOrderToDB(order)
+	err = database.InsertOrder(order)
 	if err != nil {
 		log.Printf("Failed to write order to database: %s", err)
 		return
@@ -30,20 +33,20 @@ func messageHandler(msg *stan.Msg) {
 	log.Printf("Received order with uid: %v", order.OrderUID)
 }
 
-func StartSubscriber() (stan.Conn, stan.Subscription, error) {
+func StartSubscriber() error {
 	sc, err := stan.Connect("test-cluster", "client-subscriber-1", stan.NatsURL("nats://localhost:4222"))
 	if err != nil {
 		log.Fatalf("Failed to connect to NATS Streaming: %v", err)
-		return nil, nil, err
+		return err
 	}
 
-	sub, err := sc.Subscribe("orders",
+	sub, err = sc.Subscribe("orders",
 		messageHandler,
 		stan.DurableName("my-durable"))
 	if err != nil {
 		log.Fatalf("Failed to subscribe to subject: %v", err)
-		return nil, nil, err
+		return err
 	}
 
-	return sc, sub, nil
+	return nil
 }

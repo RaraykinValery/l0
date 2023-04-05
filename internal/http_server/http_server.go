@@ -28,7 +28,7 @@ func orderHandler(w http.ResponseWriter, r *http.Request) {
 
 		uuid := r.FormValue("uuid")
 
-		order, ok := cache.GetOrderFromCache(uuid)
+		order, ok := cache.GetOrder(uuid)
 		if ok == false {
 			log.Printf("The order is not in cache")
 		}
