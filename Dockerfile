@@ -11,8 +11,6 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o /orders_service ./cmd/service/
 
-EXPOSE 8080
-
 RUN chmod 755 entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
