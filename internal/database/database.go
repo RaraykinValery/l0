@@ -17,12 +17,13 @@ func Connect() error {
 	var err error
 
 	psqlconn := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		config.Database.HOST,
 		config.Database.PORT,
 		config.Database.USER,
 		config.Database.PASSWORD,
 		config.Database.DB_NAME,
+		config.Database.SSLMODE,
 	)
 
 	log.Print("Connecting to database...")
@@ -111,4 +112,17 @@ func SelectAllOrders() ([]models.Order, error) {
 	}
 
 	return all_orders, nil
+}
+
+func CreateTables() error {
+	log.Print("Creating database tables...")
+
+	_, err := db.Exec("CREATE TABLE IF NOT EXISTS orders (uuid VARCHAR(20) PRIMARY KEY, data JSONB NOT NULL)")
+	if err != nil {
+		return err
+	}
+
+	log.Print("Database tables have been created")
+
+	return nil
 }

@@ -16,6 +16,11 @@ func Start() error {
 		return err
 	}
 
+	err = database.CreateTables()
+	if err != nil {
+		return err
+	}
+
 	err = cache.Init()
 	if err != nil {
 		return err

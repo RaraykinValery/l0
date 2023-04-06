@@ -10,4 +10,5 @@ type AppDatabase struct {
 	USER     string
 	PASSWORD string
 	DB_NAME  string
+	SSLMODE  string
 }
