@@ -44,7 +44,6 @@ func main() {
 	order, err := readJSONSample()
 	if err != nil {
 		log.Fatal("Couldn't read data from model.json")
-		panic(err)
 	}
 
 	sc, err := stan.Connect("test-cluster",
@@ -52,7 +51,6 @@ func main() {
 		stan.NatsURL("nats://localhost:4222"))
 	if err != nil {
 		log.Fatalf("Failed to connect to NATS Streaming: %v", err)
-		panic(err)
 	}
 	defer sc.Close()
 
@@ -63,8 +61,7 @@ func main() {
 		order.OrderUID = RandStringRunes(15) + "test"
 		bOrder, err := json.Marshal(order)
 		if err != nil {
-			log.Printf("Failed to marshal order: %v", err)
-			return
+			log.Fatalf("Failed to marshal order: %v", err)
 		}
 
 		sc.Publish("orders", bOrder)
