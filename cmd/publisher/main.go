@@ -57,7 +57,6 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	for {
-		time.Sleep(10 * time.Second)
 		order.OrderUID = RandStringRunes(15) + "test"
 		bOrder, err := json.Marshal(order)
 		if err != nil {
@@ -70,5 +69,7 @@ func main() {
 		}
 
 		log.Printf("Order with uid %s was published", order.OrderUID)
+
+		time.Sleep(10 * time.Second)
 	}
 }
