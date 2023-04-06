@@ -1,0 +1,26 @@
+services:
+
+  orders-service:
+    build:
+      context: .
+    container_name: orders-service
+    depends_on:
+      - database
+    ports:
+      - "8080:8080"
+
+  database:
+    image: postgres:15.2
+    environment:
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=wb
+    ports:
+      - "5432:5432"
+
+  nats-streaming:
+    image: nats-streaming
+    container_name: nats-streaming
+    ports:
+      - "4222:4222"
+      - "8222:8222"

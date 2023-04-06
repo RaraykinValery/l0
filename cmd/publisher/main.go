@@ -64,6 +64,11 @@ func main() {
 			log.Fatalf("Failed to marshal order: %v", err)
 		}
 
-		sc.Publish("orders", bOrder)
+		err = sc.Publish("orders", bOrder)
+		if err != nil {
+			panic(err)
+		}
+
+		log.Printf("Order with uid %s was published", order.OrderUID)
 	}
 }

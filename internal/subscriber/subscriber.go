@@ -39,7 +39,7 @@ func Start() error {
 	sc, err = stan.Connect(
 		"test-cluster",
 		"client-subscriber-1",
-		stan.NatsURL("nats://localhost:4222"),
+		stan.NatsURL("nats://nats-streaming:4222"),
 	)
 	if err != nil {
 		return err
