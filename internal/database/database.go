@@ -32,6 +32,11 @@ func Connect() error {
 		return err
 	}
 
+	err = db.Ping()
+	if err != nil {
+		return err
+	}
+
 	log.Print("Database connected")
 
 	return nil
