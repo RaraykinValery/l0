@@ -38,6 +38,8 @@ func orderHandler(w http.ResponseWriter, r *http.Request) {
 			log.Printf("Requested order is not in cache")
 		}
 
+		log.Printf("Order with uuid %s was requested", uuid)
+
 		templates.ExecuteTemplate(w, "index", order)
 	}
 }
