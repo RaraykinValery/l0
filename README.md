@@ -1,4 +1,4 @@
-# L0
+# Orders Service
 
 В сервисе:
 1. Подключение и подписка на канал в nats-streaming
